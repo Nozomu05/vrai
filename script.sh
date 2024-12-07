@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+#partie 1
 echo "choisir que faire\n1) accepter tout les traffics\n2) refuser tout les traffics"
 read valeur
 
@@ -17,7 +19,7 @@ else
 fi
 
 
-
+#partie 2
 ajouter_regle() {
   echo "\nAjouter une règle :"
   echo "\nProtocole (tcp/udp) : " 
@@ -31,7 +33,6 @@ ajouter_regle() {
   echo "\nAdresse IP destination (laisser vide pour tout) : " 
   read destination
 
-  # Construction de la commande
   cmd="iptables -A INPUT"
   if [[ -n $source ]]; then
     cmd+=" -s $source"
@@ -41,7 +42,6 @@ ajouter_regle() {
   fi
   cmd+=" -p $protocole --dport $port -j $action"
 
-  # Exécution de la commande
   echo "Exécution : $cmd"
   eval $cmd
   echo "Règle ajoutée."
@@ -50,7 +50,8 @@ ajouter_regle() {
 modifier_regle() {
   echo "\nModifier une règle :"
   iptables -L --line-numbers
-  echo "\nNuméro de la règle à modifier (iptables -L --line-numbers pour voir les numéros) : " numero
+  echo "\nNuméro de la règle à modifier  : " 
+  read numero
   echo "\nProtocole (tcp/udp) : " 
   read protocole
   echo "\nPort ou service : " 
@@ -82,7 +83,7 @@ modifier_regle() {
 supprimer_regle() {
   echo "\nSupprimer une règle :"
   iptables -L --line-numbers
-  echo "\nNuméro de la règle à supprimer (iptables -L --line-numbers pour voir les numéros) : " 
+  echo "\nNuméro de la règle à supprimer  : " 
   read numero
   iptables -D INPUT $numero
   echo "Règle supprimée."
@@ -108,3 +109,5 @@ case $choix in
 	*)
 		echo "Choix invalide"
 esac 
+
+#partie 3
