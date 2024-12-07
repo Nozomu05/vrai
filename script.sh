@@ -17,3 +17,94 @@ else
 fi
 
 
+
+ajouter_regle() {
+  echo "\nAjouter une règle :"
+  echo "\nProtocole (tcp/udp) : " 
+  read protocole
+  echo "\nPort ou service : " 
+  read port
+  echo "\nAction (ACCEPT/DROP/REJECT) : " 
+  read action
+  echo "\nAdresse IP source (laisser vide pour tout) : " 
+  read source
+  echo "\nAdresse IP destination (laisser vide pour tout) : " 
+  read destination
+
+  # Construction de la commande
+  cmd="iptables -A INPUT"
+  if [[ -n $source ]]; then
+    cmd+=" -s $source"
+  fi
+  if [[ -n $destination ]]; then
+    cmd+=" -d $destination"
+  fi
+  cmd+=" -p $protocole --dport $port -j $action"
+
+  # Exécution de la commande
+  echo "Exécution : $cmd"
+  eval $cmd
+  echo "Règle ajoutée."
+}
+
+modifier_regle() {
+  echo "\nModifier une règle :"
+  iptables -L --line-numbers
+  echo "\nNuméro de la règle à modifier (iptables -L --line-numbers pour voir les numéros) : " numero
+  echo "\nProtocole (tcp/udp) : " 
+  read protocole
+  echo "\nPort ou service : " 
+  read port
+  echo "\nAction (ACCEPT/DROP/REJECT) : " 
+  read action
+  echo "\nAdresse IP source (laisser vide pour tout) : " 
+  read source
+  echo "\nAdresse IP destination (laisser vide pour tout) : " 
+  read destination
+
+  iptables -D INPUT $numero
+
+  cmd="iptables -A INPUT"
+  if [[ -n $source ]]; then
+    cmd+=" -s $source"
+  fi
+  if [[ -n $destination ]]; then
+    cmd+=" -d $destination"
+  fi
+  cmd+=" -p $protocole --dport $port -j $action"
+
+  echo "Exécution : $cmd"
+  eval $cmd
+  echo "Règle modifiée."
+}
+
+
+supprimer_regle() {
+  echo "\nSupprimer une règle :"
+  iptables -L --line-numbers
+  echo "\nNuméro de la règle à supprimer (iptables -L --line-numbers pour voir les numéros) : " 
+  read numero
+  iptables -D INPUT $numero
+  echo "Règle supprimée."
+}
+
+echo -e "\nGestion des règles de pare-feu :"
+echo "1) Ajouter une règle"
+echo "2) Modifier une règle"
+echo "3) Supprimer une règle"
+echo "Votre choix : " 
+read choix
+
+case $choix in 
+	1)
+		ajouter_regle
+		;;
+	2)
+		modifier_regle
+		;;
+	3)
+		supprimer_regle
+		;;
+	*)
+		echo "Choix invalide"
+esac 
