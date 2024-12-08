@@ -126,3 +126,15 @@ configurer_nat() {
         iptables -t nat -A PREROUTING -p tcp --dport $port_source -j DNAT --to-destination $ip_dest:$port_dest
     fi
 }
+
+#partie 4
+activer_journalisation() {
+    read -p "Activer la journalisation pour INPUT (oui/non) ? : " log_input
+    if [ "$log_input" == "oui" ]; then
+        iptables -A INPUT -j LOG --log-prefix "INPUT BLOCK: "
+    fi
+    read -p "Activer la journalisation pour OUTPUT (oui/non) ? : " log_output
+    if [ "$log_output" == "oui" ]; then
+        iptables -A OUTPUT -j LOG --log-prefix "OUTPUT BLOCK: "
+    fi
+}
