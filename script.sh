@@ -111,3 +111,18 @@ case $choix in
 esac 
 
 #partie 3
+
+configurer_nat() {
+    read -p "Activer le masquage NAT (oui/non) ? : " nat
+    if [ "$nat" = "oui" ]; then
+        iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+    fi
+
+    read -p "Rediriger un port (oui/non) ? : " port
+    if [ "$port" = "oui" ]; then
+        read -p "Port source : " port_source
+        read -p "IP destination : " ip_dest
+        read -p "Port destination : " port_dest
+        iptables -t nat -A PREROUTING -p tcp --dport $port_source -j DNAT --to-destination $ip_dest:$port_dest
+    fi
+}
