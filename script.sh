@@ -34,13 +34,13 @@ ajouter_regle() {
   read destination
 
   cmd="iptables -A INPUT"
-  if [[ -n $source ]]; then
-    $cmd+=" -s $source"
+  if [ [ -n $source ] ]; then
+    cmd+=" -s $source"
   fi
-  if [[ -n $destination ]]; then
-    $cmd+=" -d $destination"
+  if [ [ -n $destination ] ]; then
+    cmd+=" -d $destination"
   fi
-  $cmd+=" -p $protocole --dport $port -j $action"
+  cmd+=" -p $protocole --dport $port -j $action"
 
   echo "Exécution : $cmd"
   eval $cmd
@@ -65,14 +65,14 @@ modifier_regle() {
 
   iptables -D INPUT $numero
 
-  $cmd="iptables -A INPUT"
-  if [[ -n $source ]]; then
-    $cmd+=" -s $source"
+  cmd="iptables -A INPUT"
+  if [ [ -n $source ] ]; then
+    cmd+=" -s $source"
   fi
-  if [[ -n $destination ]]; then
-    $cmd+=" -d $destination"
+  if [ [ -n $destination ] ]; then
+    cmd+=" -d $destination"
   fi
-  $cmd+=" -p $protocole --dport $port -j $action"
+  cmd+=" -p $protocole --dport $port -j $action"
 
   echo "Exécution : $cmd"
   eval $cmd
@@ -89,7 +89,7 @@ supprimer_regle() {
   echo "Règle supprimée."
 }
 
-echo -e "\nGestion des règle de pare-feu :"
+echo "\nGestion des règle de pare-feu :"
 echo "1) Ajouter une règle"
 echo "2) Modifier une règle"
 echo "3) Supprimer une règle"
