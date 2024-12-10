@@ -33,17 +33,13 @@ ajouter_regle() {
   echo "\nAdresse IP destination (laisser vide pour tout) : " 
   read destination
 
-  cmd="iptables -A INPUT"
-  if [ [ -n $source ] ]; then
-    cmd+=" -s $source"
+  if [ [ $source != "" ] && [ $destination != "" ] ]; then
+    echo "Exécution"
+    iptables -A INPUT -s $source -d $destination -p $protocole --dport $port -j $action
+  else 
+    echo "Exécution"
+    iptables -A INPUT -p $protocole --dport $port -j $action
   fi
-  if [ [ -n $destination ] ]; then
-    cmd+=" -d $destination"
-  fi
-  cmd+=" -p $protocole --dport $port -j $action"
-
-  echo "Exécution : $cmd"
-  eval $cmd
   echo "Règle ajoutée."
 }
 
@@ -65,18 +61,14 @@ modifier_regle() {
 
   iptables -D INPUT $numero
 
-  cmd="iptables -A INPUT"
-  if [ [ -n $source ] ]; then
-    cmd+=" -s $source"
+  if [ [ $source != "" ] && [ $destination != "" ] ]; then
+    echo "Exécution"
+    iptables -A INPUT -s $source -d $destination -p $protocole --dport $port -j $action
+  else 
+    echo "Exécution"
+    iptables -A INPUT -p $protocole --dport $port -j $action
   fi
-  if [ [ -n $destination ] ]; then
-    cmd+=" -d $destination"
-  fi
-  cmd+=" -p $protocole --dport $port -j $action"
-
-  echo "Exécution : $cmd"
-  eval $cmd
-  echo "Règle modifiée."
+  echo "Règle ajoutée."
 }
 
 
@@ -142,7 +134,7 @@ activer_journalisation() {
     if [ "$log_output" == "oui" ]; then
         iptables -A OUTPUT -j LOG --log-prefix "OUTPUT BLOCK: "
     elif [ "$log_input" == "non" ]; then
-    	 iptables -D INPUT -j LOG --log-prefix "OUTPUT BLOCK: "
+    	 iptables -D ONPUT -j LOG --log-prefix "OUTPUT BLOCK: "
     fi
 }
 
