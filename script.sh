@@ -35,12 +35,12 @@ ajouter_regle() {
 
   cmd="iptables -A INPUT"
   if [[ -n $source ]]; then
-    cmd+=" -s $source"
+    $cmd+=" -s $source"
   fi
   if [[ -n $destination ]]; then
-    cmd+=" -d $destination"
+    $cmd+=" -d $destination"
   fi
-  cmd+=" -p $protocole --dport $port -j $action"
+  $cmd+=" -p $protocole --dport $port -j $action"
 
   echo "Exécution : $cmd"
   eval $cmd
@@ -65,14 +65,14 @@ modifier_regle() {
 
   iptables -D INPUT $numero
 
-  cmd="iptables -A INPUT"
+  $cmd="iptables -A INPUT"
   if [[ -n $source ]]; then
-    cmd+=" -s $source"
+    $cmd+=" -s $source"
   fi
   if [[ -n $destination ]]; then
-    cmd+=" -d $destination"
+    $cmd+=" -d $destination"
   fi
-  cmd+=" -p $protocole --dport $port -j $action"
+  $cmd+=" -p $protocole --dport $port -j $action"
 
   echo "Exécution : $cmd"
   eval $cmd
